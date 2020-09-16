@@ -3,8 +3,23 @@ from pynput import keyboard
 import threading
 import platform
 import time
-o=platform.system()
 
+#import threading
+#import time
+import pyautogui
+import shutil
+import os
+#import subprocess
+import datetime
+import platform
+
+
+o=platform.system()
+width = 960
+height = 540
+
+precent_time = datetime.datetime.utcnow()
+t = precent_time.strftime("%Y%m%d%H%M%S%f")
 
 
 
@@ -121,17 +136,71 @@ def liskey():
 
 
 
+
+def screenshot_ub():
+    global precent_time
+    precent_time = datetime.datetime.utcnow()
+    myScreenshot = pyautogui.screenshot() 
+    print(type(myScreenshot))
+    print(precent_time)
+    image = myScreenshot.resize((width, height))
+#   path = 'Images/'
+    name = str(precent_time)+".png"
+    image.save(name)
+    
+    original = name
+    target = ('Images/')
+    shutil.move(original,target)
+    p6 = threading.Timer(3.0, screenshot_ub)
+    p6.start()
+
+def screenshot_wi():
+
+    global precent_time
+    global t
+    precent_time = datetime.datetime.utcnow()
+    t = precent_time.strftime("%Y%m%d%H%M%S%f")
+    # path = 'Images/'
+    myScreenshot = pyautogui.screenshot()
+    image = myScreenshot.resize((width, height))
+    name = str(t)+".png"    
+    image.save(name)
+
+    print(t)
+    
+    print(name)
+    original = name
+    target = ('Images/')
+    shutil.move(original,target)
+    p5 = threading.Timer(5.0, screenshot_wi)
+    p5.start()
+
+
+
+
+
+
+
 if __name__ == '__main__':
+  if not os.path.exists("Images"):
+    directory = "Images"
+    parent_dir = ""
+    path = os.path.join(parent_dir, directory)
+    os.mkdir(path)
   p1 = threading.Thread(target=liskey)
   p1.start()
   p2 = threading.Thread(target=listenmouse)
   p2.start()
   p3 = threading.Thread(target=printub)
   p4 = threading.Thread(target=get_active_window_title_win)
+  p5 = threading.Thread(target=screenshot_wi)
+  p6 = threading.Thread(target=screenshot_ub)
   if o=="Linux":
     p3.start()
+    p6.start()
   else:
     p4.start()
+    p5.start()
 
   p1.join()
   p2.join()
