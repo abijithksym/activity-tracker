@@ -1,6 +1,7 @@
 from pynput import mouse
 from pynput import keyboard
 import threading
+import platform
 import time
 import logging
 import pyautogui
@@ -8,19 +9,18 @@ import shutil
 import os
 import datetime
 import platform
-# import urllib.request
-
+import urllib.request
 
 
 operating_system = platform.system()
 width = 960
 height = 540
 
+screen_shot_time = 10.0
+screen_shot_permission = input("Do you want to take screenshot?(Y/N):")
 
 
-
-
-precent_time = datetime.datetime.now()
+precent_time = datetime.datetime.utcnow()
 t = precent_time.strftime("%Y%m%d%H%M%S%f")
 
 logging.basicConfig(level = logging.INFO, filename = 'activity.log')
@@ -66,6 +66,24 @@ def get_active_window_title_win():
         print(GetWindowText(GetForegroundWindow()))
         time.sleep(1)
 
+# def connect():
+#     try:
+#         host='http://google.com'
+#         urllib.request.urlopen(host) #Python 3.x
+#         return True
+        
+#     except:
+#         return False
+# print( "connected" if connect() else "no internet!" )
+# logging.info("[INFO]: connected" if connect() else "[Exception]:no internet!" )
+# test
+
+
+    # p7 = threading.Timer(10.0, connect(host='http://google.com'))
+    # p7.start()
+
+
+
 
 def on_move(x, y):
     print('Pointer moved to {0}'.format((x, y)))
@@ -100,13 +118,15 @@ def listenmouse():
 	    on_scroll=on_scroll)
 	listener.start()
 
+
+
+
+
+
 def on_press(key):
-    print(key)
     try:
-        print('alphanumeric key {0}  pressed'.format(key.char))
+        print('alphanumeric key {0} pressed'.format(key.char))
         logging.info("[INFO]: alphanumeric key {0} pressed".format(key.char))
-        if key == 97:
-            print("hi")
 
     except AttributeError:
         print('special key {0} pressed'.format(key))
@@ -118,8 +138,8 @@ def on_release(key):
     logging.info("{0} released".format(key))
 
     # if key == keyboard.Key.esc:
-    #     listener.stop
-    #     return False
+        # Stop listener
+        # return False
 def liskey():
 
 # Collect events until released
@@ -136,19 +156,15 @@ def liskey():
 
 def screenshot_ub():
     global precent_time
-
-    precent_time = datetime.datetime.now()
+    precent_time = datetime.datetime.utcnow()
     myScreenshot = pyautogui.screenshot() 
-    print("===================")
     print(type(myScreenshot))
-    print(datetime.datetime.now())
     print(precent_time)
-    print("===================")
     image = myScreenshot.resize((width, height))
     #   path = 'Images/'
     name = str(precent_time)+".png"
     image.save(name)
-    
+
     original = name
     target = ('Images/')
     shutil.move(original,target)
@@ -161,7 +177,7 @@ def screenshot_wi():
 
     global precent_time
     global t
-    precent_time = datetime.datetime.now()
+    precent_time = datetime.datetime.utcnow()
     t = precent_time.strftime("%Y%m%d%H%M%S%f")
     # path = 'Images/'
     myScreenshot = pyautogui.screenshot()
@@ -180,7 +196,6 @@ def screenshot_wi():
     p5.start()
 
 def connect():
-    
     while True:
         hostname = "google.com"
         response = os.system("ping -c 1 " + hostname)
@@ -198,38 +213,34 @@ def connect():
 
 
 if __name__ == '__main__':
-    screen_shot_time = 10.0
-    if not os.path.exists("Images"):
-        directory = "Images"
-        parent_dir = ""
-        path = os.path.join(parent_dir, directory)
-        os.mkdir(path)
+  if not os.path.exists("Images"):
+    directory = "Images"
+    parent_dir = ""
+    path = os.path.join(parent_dir, directory)
+    os.mkdir(path)
 
-    p1 = threading.Thread(target=liskey)
-    p1.start()
-    p2 = threading.Thread(target=listenmouse)
-    p2.start()
-    p3 = threading.Thread(target=printub)
-    p4 = threading.Thread(target=get_active_window_title_win)
-  
-  
-    p7 = threading.Timer(10.0, connect)
-    p7.start()
+  p1 = threading.Thread(target=liskey)
+  p1.start()
+  p2 = threading.Thread(target=listenmouse)
+  p2.start()
+  p3 = threading.Thread(target=printub)
+  p4 = threading.Thread(target=get_active_window_title_win)
+  p5 = threading.Thread(target=screenshot_wi)
+  p6 = threading.Thread(target=screenshot_ub)
+  p7 = threading.Timer(10.0, connect)
+  p7.start()
 
-    if operating_system =="Linux":
-        screen_shot_permission = str(input("Do you want to take screenshot?(Y/N):"))
+  if operating_system =="Linux":
+    p3.start()
+    if screen_shot_permission == 'y':
+      p6.start()
+  else:
+    p4.start()
+    if screen_shot_permission == 'y':
+      p5.start()
 
-        p3.start()
-        if screen_shot_permission == 'y':
-            p6 = threading.Timer(screen_shot_time, screenshot_ub)
-            p6.start()
-    else:
-        p4.start()
-        p5 = threading.Timer(10.0, screenshot_wi)
-        p5.start()
-
-    p1.join()
-    p2.join()
+  p1.join()
+  p2.join()
   
 
   
