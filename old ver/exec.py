@@ -12,6 +12,8 @@ def get_active_window_title():
     stdout, stderr = root.communicate()
 
     m = re.search(b'^_NET_ACTIVE_WINDOW.* ([\w]+)$', stdout)
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print(m)
     if m != None:
         window_id = m.group(1)
         window = subprocess.Popen(['xprop', '-id', window_id, 'WM_NAME'], stdout=subprocess.PIPE)
