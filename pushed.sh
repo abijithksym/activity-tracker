@@ -7,7 +7,5 @@ git commit -m "message1"
 # else
 git status
 echo "Pushing data to remote server!!!"
-username = "abijithksym"
-password = "symptots123"
 git push -u origin set-url " https://github.com/abijithksym/activity-tracker.git"
 # fi
