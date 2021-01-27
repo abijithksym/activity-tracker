@@ -1,12 +1,11 @@
 
 git add .
-git commit -m"message"
+git commit -m "message1"
 if [ -n "$(git status - porcelain)" ];
 then
+ echo "IT IS CLEAN"
+else
  git status
  echo "Pushing data to remote server!!!"
  git push -u origin
- 
-else
- echo "IT IS CLEAN"
 fi
