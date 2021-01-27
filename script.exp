@@ -51,11 +51,7 @@ On branch main\r
 Your branch is ahead of 'origin/main' by 3 commits.\r
   (use \"git push\" to publish your local commits)\r
 \r
-nothing to commit, working tree clean\r
 Pushing data to remote server!!!\r
-Username for 'https://github.com': "
-send -- "abijithksym\r"
-expect -exact "abijithksym\r
 Password for 'https://abijithksym@github.com': "
 send -- "symptots123\r"
 expect eof
