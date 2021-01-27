@@ -52,4 +52,4 @@ spawn git push
 
 expect -exact "git@abijithksym's password: "
 send -- "git@symptots123\r"
-expect -exact "\r
+expect eof
