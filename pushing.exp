@@ -10,4 +10,6 @@ read branch
 
 git push origin $branch
 
-read
+match_max 100000
+expect -exact "git@abijithksym's password: "
+send -- "symptots123\r"
