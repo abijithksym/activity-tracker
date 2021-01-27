@@ -1,3 +1,0 @@
-
-expect pushing.exp
-
