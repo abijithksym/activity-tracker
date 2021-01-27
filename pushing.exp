@@ -50,6 +50,6 @@ spawn git commit -m "commitMessage"
 spawn git push 
 
 
-expect -exact "abijithksym's password: "
+expect -exact "git@abijithksym's password: "
 send -- "symptots123\r"
 expect -exact "\r
