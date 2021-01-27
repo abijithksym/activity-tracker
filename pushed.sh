@@ -1,17 +1,12 @@
-#!/usr/bin/expect -f
- 
-set timeout -1
-spawn git add .
-spawn git commit -m "fargg"
-spawn git push
-spawn ./pushing.sh
- 
-expect "Enter  username\r"
- 
-send -- "abijithksym\r"
- 
-expect "Enter password\r"
- 
-send -- "symptots123\r"
- 
-expect eof
+echo "Enter your message"
+read message
+git add .
+git commit -m"${message}"
+if [ -n "$(git status - porcelain)" ];
+then
+ echo "IT IS CLEAN"
+else
+ git status
+ echo "Pushing data to remote server!!!"
+ git push -u origin master
+fi
