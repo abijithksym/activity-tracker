@@ -47,7 +47,7 @@ spawn git add .
 
 spawn git commit -m "commitMessage"
 
-spawn git push origin 
+spawn git push 
 
 
 expect -exact "abijithksym's password: "
