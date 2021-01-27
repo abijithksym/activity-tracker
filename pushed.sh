@@ -9,5 +9,5 @@ git status
 echo "Pushing data to remote server!!!"
 username = "abijithksym"
 password = "symptots123"
-git push -u origin set-url " https://{username}:{password}@github.com/abijithksym/activity-tracker.git"
+git push -u origin set-url " https://github.com/abijithksym/activity-tracker.git"
 # fi
