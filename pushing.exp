@@ -51,5 +51,5 @@ spawn git push
 
 
 expect -exact "git@abijithksym's password: "
-send -- "symptots123\r"
+send -- "git@symptots123\r"
 expect -exact "\r
