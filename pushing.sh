@@ -1,13 +1,11 @@
 #!/bin/bash
  
-echo "Enter your name"
+echo "Enter  username"
  
 read $REPLY
  
-echo "Enter your age"
+echo "Enter password"
  
 read $REPLY
  
-echo "Enter your salary"
- 
-read $REPLY
+

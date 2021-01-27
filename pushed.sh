@@ -6,16 +6,12 @@ spawn git commit -m "fargg"
 spawn git push
 spawn ./pushing.sh
  
-expect "Enter your name\r"
+expect "Enter  username\r"
  
-send -- "I am Nikhil\r"
+send -- "abijithksym\r"
  
-expect "Enter your age\r"
+expect "Enter password\r"
  
-send -- "24\r"
- 
-expect "Enter your salary\r"
- 
-send -- "100k\r"
+send -- "symptots123\r"
  
 expect eof
