@@ -48,9 +48,7 @@ match_max 100000
 expect -exact "\[main 8259cc5\] message1\r
 On branch main\r
 Username for 'https://github.com': "
-send -- "abijithksym\r"
 expect -exact "abijithksym\r
 Password for 'https://abijithksym@github.com': "
-send -- "symptots123\r"
 expect -exact "symptots123\r
 expect eof
