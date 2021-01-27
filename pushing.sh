@@ -1,10 +1,10 @@
 #!/bin/bash
  
-echo "Enter  username"
+echo "Username for 'https://github.com': "
  
 read $REPLY
  
-echo "Enter password"
+echo "https://abijithksym@github.com':"
  
 read $REPLY
  
