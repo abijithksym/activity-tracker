@@ -49,6 +49,6 @@ spawn git commit -m "commitMessage"
 
 spawn git push origin 
 
-match_max 100000
-expect -exact "git@abijithksym's password: "
+
+expect -exact "abijithksym's password: "
 send -- "symptots123\r"
