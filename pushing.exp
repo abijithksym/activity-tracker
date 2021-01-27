@@ -43,8 +43,6 @@ if {$force_conservative} {
 
 
 set timeout -1
-spawn git remote set-url origin "https://github.com/abijithksym/activity-tracker"
-spawn git push -u origin
 match_max 100000
 expect -exact "git@abijithksym password: "
 send -- "symptots123\r"
