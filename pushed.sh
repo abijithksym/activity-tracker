@@ -7,5 +7,5 @@ git commit -m "message1"
 # else
 git status
 echo "Pushing data to remote server!!!"
-git push -u origin set-url " https://github.com/abijithksym/activity-tracker.git"
+git push -u set-url "https://github.com/abijithksym/activity-tracker.git" origin
 # fi
