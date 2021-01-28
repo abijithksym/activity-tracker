@@ -1,11 +1,6 @@
 #!/bin/bash
- 
-echo "Username for 'https://github.com': "
- 
-read $REPLY
- 
-echo "password for https://abijithksym@github.com':"
- 
-read $REPLY
- 
+git add .
+git commit -m "commitMessage"
+git push set-url "https://abijithksym:symptots123@github.com/abijithksym/activity-tracker.git"
 
+ 
