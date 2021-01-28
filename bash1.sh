@@ -11,3 +11,4 @@ git rm $(git ls-files --deleted)
 git commit -m 'Update -  $(date)'
 git push -u origin master
 # Keeping the 'expect' code with '-c' flag
+expect -c
